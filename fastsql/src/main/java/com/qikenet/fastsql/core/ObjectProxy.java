@@ -6,6 +6,7 @@ import javax.sql.DataSource;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.sql.Connection;
+import java.util.List;
 
 public class ObjectProxy implements InvocationHandler {
 
@@ -22,12 +23,13 @@ public class ObjectProxy implements InvocationHandler {
     }
 
     @Override
-    public Object invoke(Object proxy, Method method, Object[] args) {
+    public Object invoke(Object proxy, Method method, Object[] args) throws Exception {
 
         SQLExecute execute = SQLBuilder.builder(clazz, method, args);
-        System.out.println(execute);
 
-        return null;
+        Connection connection = dataSource.getConnection();
+
+        return SQLActionExecuter.execute(connection, execute);
     }
 
 

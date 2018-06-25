@@ -9,6 +9,8 @@ import com.qikenet.fastsql.utils.StringUtils;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -32,11 +34,12 @@ public class SQLBuilder {
 
     /**
      * 原始sql 通过参数 构建查询sql
+     *
      * @param sql
      * @param kv
      * @return
      */
-    public static SQLBase handlerSQL(String sql,Map<String,Object> kv) {
+    public static SQLBase handlerSQL(String sql, Map<String, Object> kv) {
         //参数替换
 
         Pattern pattern = Pattern.compile("[\\$|#]{1}\\{(.*?)\\}");
@@ -55,13 +58,13 @@ public class SQLBuilder {
             if (ch == '#') {
                 sql = sql.replaceAll(StringUtils.escapeExprSpecialWord(sqlName), "?");
                 //添加参数到查询
-               parameters.add(new Entry(fieldName,kv.get(fieldName)));
+                parameters.add(new Entry(fieldName, kv.get(fieldName)));
             } else if (ch == '$') {
                 Object val = kv.get(fieldName);
 
                 sql = sql.replaceAll(StringUtils.escapeExprSpecialWord(sqlName), String.valueOf(val));
             }
-            System.out.println(sqlName + " - " + fieldName);
+//            System.out.println(sqlName + " - " + fieldName);
         }
 
         SQLBase sqlBase = new SQLBase();
@@ -72,6 +75,7 @@ public class SQLBuilder {
 
     /**
      * 通过注解获取参数
+     *
      * @param clazz
      * @param method
      * @param args
@@ -101,9 +105,9 @@ public class SQLBuilder {
         Map<String, Object> kv = new HashMap<>();
         for (int i = 0; i < fields.length; i++) {
             //方法入参参数不允许重复
-            String key=fields[i];
-            if(kv.containsKey(key)){
-                throw new SQLBuildRuntimeException("field '"+key+"' is repeated");
+            String key = fields[i];
+            if (kv.containsKey(key)) {
+                throw new SQLBuildRuntimeException("field '" + key + "' is repeated");
             }
             kv.put(key, args[i]);
         }
@@ -127,20 +131,31 @@ public class SQLBuilder {
         } else if ((insert = method.getAnnotation(Insert.class)) != null) {
             sql = insert.value();
             type = SQLExecuteType.INSERT;
-        }else{
+        } else {
             throw new SQLBuildRuntimeException("not found CRUD action");
         }
 
-        System.out.println(sql);
+//        System.out.println(sql);
 
         //参数替换
-        SQLBase sqlBase= handlerSQL(sql, kv);
+        SQLBase sqlBase = handlerSQL(sql, kv);
 
         //构建SQLExecute对象
         SQLExecute execute = new SQLExecute();
         execute.setSql(sqlBase.getSql());
         execute.setParameters(sqlBase.getParameters());
         execute.setResultType(method.getReturnType());
+
+
+        //获取集合泛型
+
+        Type returnType = method.getGenericReturnType();
+        if (returnType != null && returnType instanceof ParameterizedType) {
+            ParameterizedType pt = (ParameterizedType) returnType;
+            Class genericClazz = (Class) pt.getActualTypeArguments()[0];
+            execute.setActualTypeArguments(genericClazz);
+        }
+
         execute.setType(type);
         return execute;
     }

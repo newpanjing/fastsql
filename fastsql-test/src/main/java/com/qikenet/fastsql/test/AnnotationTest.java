@@ -1,4 +1,4 @@
-package fastsql;
+package com.qikenet.fastsql.test;
 
 import com.qikenet.fastsql.annotation.Column;
 import com.qikenet.fastsql.annotation.Table;
@@ -9,7 +9,7 @@ public class AnnotationTest {
     @Column("sql_name")
     private String name;
 
-    @Column(name = "table_id", primaryKey = true)
+    @Column("table_id")
     private Long id;
 
     @Column

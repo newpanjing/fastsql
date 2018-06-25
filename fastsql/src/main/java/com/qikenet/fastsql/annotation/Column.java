@@ -15,9 +15,4 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 public @interface Column {
 
     String value() default "";
-
-    String name() default "";
-
-    boolean primaryKey() default false;
-
 }
