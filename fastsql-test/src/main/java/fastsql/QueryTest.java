@@ -1,4 +1,4 @@
-package com.qikenet.fastsql;
+package fastsql;
 
 
 import com.alibaba.druid.pool.DruidDataSource;

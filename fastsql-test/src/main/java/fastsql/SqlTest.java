@@ -1,4 +1,4 @@
-package com.qikenet.fastsql;
+package fastsql;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

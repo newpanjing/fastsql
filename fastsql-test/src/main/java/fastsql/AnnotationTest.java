@@ -1,4 +1,4 @@
-package com.qikenet.fastsql;
+package fastsql;
 
 import com.qikenet.fastsql.annotation.Column;
 import com.qikenet.fastsql.annotation.Table;

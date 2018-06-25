@@ -1,4 +1,4 @@
-package com.qikenet.fastsql;
+package fastsql;
 
 import com.qikenet.fastsql.annotation.*;
 import com.qikenet.fastsql.entity.SQLExecuteType;
@@ -6,12 +6,12 @@ import com.qikenet.fastsql.entity.SQLExecuteType;
 public interface UserDao {
 
     @Select("select * from user where user_id=#{userId} and name='${name}' and remark='${remark}'")
-    public User findOne(@Param("userId") Long userId,@Param("name") String name,@Param("remark") String remark);
+    public User findOne(@Param("userId") Long userId, @Param("name") String name, @Param("remark") String remark);
 
 
     @SelectKey
     @Insert("insert into user(name,age)values(#{name},#{age})")
-    public Integer insert(@Param("name") String userName,@Param("age") Integer age,@Param("age1") Integer page);
+    public Integer insert(@Param("name") String userName, @Param("age") Integer age, @Param("age1") Integer page);
 
 
     @SelectKey(keyProperty = "id",keyColumn = "id")
