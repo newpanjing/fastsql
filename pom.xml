@@ -4,11 +4,11 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.qikenet</groupId>
-    <artifactId>qikenet-fastsql-parent</artifactId>
+    <groupId>org.fastsql</groupId>
+    <artifactId>fastsql-parent</artifactId>
     <version>${parent.version}</version>
 	<packaging>pom</packaging>
-    <url>http://fastsql.qikenet.com</url>
+    <url>http://fastsql.org</url>
     <properties>
         <project.build.sourceEncoding>GBK</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
