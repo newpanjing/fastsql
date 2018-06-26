@@ -3,7 +3,6 @@ package org.fastsql.utils;
 import org.fastsql.annotation.Column;
 
 import java.lang.reflect.Field;
-
 import java.util.*;
 
 public class ConvertObject {

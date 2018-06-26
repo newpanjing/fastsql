@@ -1,18 +1,20 @@
 package org.fastsql.build;
 
-import com.qikenet.fastsql.annotation.*;
+import org.fastsql.annotation.*;
 import org.fastsql.core.Entry;
 import org.fastsql.core.SQLExecute;
 import org.fastsql.entity.SQLExecuteType;
 import org.fastsql.exception.SQLBuildRuntimeException;
 import org.fastsql.utils.StringUtils;
-import org.fastsql.annotation.*;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 

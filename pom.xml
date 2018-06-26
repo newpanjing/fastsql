@@ -9,6 +9,33 @@
     <version>${parent.version}</version>
 	<packaging>pom</packaging>
     <url>http://fastsql.org</url>
+
+    <licenses>
+        <license>
+            <name>The Apache License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <name>panjing</name>
+            <email>newpanjing@163.com</email>
+            <organization>fastsql</organization>
+            <organizationUrl>http://www.fastsql.org</organizationUrl>
+        </developer>
+    </developers>
+
+    <scm>
+        <connection>
+            scm:git:https://github.com/newpanjing/fastsql.git
+        </connection>
+        <developerConnection>
+            scm:git:https://github.com/newpanjing/fastsql.git
+        </developerConnection>
+        <url>https://github.com/newpanjing/fastsql</url>
+    </scm>
+
     <properties>
         <project.build.sourceEncoding>GBK</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>

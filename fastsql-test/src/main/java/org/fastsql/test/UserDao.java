@@ -1,6 +1,5 @@
 package org.fastsql.test;
 
-import com.qikenet.fastsql.annotation.*;
 import org.fastsql.annotation.Param;
 import org.fastsql.annotation.Select;
 

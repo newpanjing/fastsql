@@ -5,7 +5,9 @@ import org.fastsql.utils.ClassUtils;
 import org.fastsql.utils.ConvertObject;
 import org.fastsql.utils.ConvertResultSet;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.List;
 import java.util.Map;
 
