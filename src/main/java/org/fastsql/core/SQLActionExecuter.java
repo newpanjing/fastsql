@@ -1,56 +1,63 @@
 package org.fastsql.core;
 
+import org.apache.log4j.Logger;
 import org.fastsql.entity.SQLExecuteType;
+import org.fastsql.exception.ConvertException;
+import org.fastsql.handler.ResultHandler;
+import org.fastsql.handler.SelectResultHandler;
+import org.fastsql.handler.UpdateResultHandler;
 import org.fastsql.utils.ClassUtils;
-import org.fastsql.utils.ConvertObject;
-import org.fastsql.utils.ConvertResultSet;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.util.List;
-import java.util.Map;
 
 public class SQLActionExecuter {
 
-    public static Object execute(Connection connection, SQLExecute execute) throws Exception {
+    private final static Logger logger = Logger.getLogger(SQLActionExecuter.class);
 
+    public static Object execute(Connection connection, SQLParameter parameter) throws Exception {
 
-        PreparedStatement ps = connection.prepareStatement(execute.getSql());
-        System.out.println(execute);
+        if (logger.isDebugEnabled()) {
+            logger.debug("SQL: " + parameter.getSql());
+            logger.debug("SQL type: " + parameter.getType());
+            logger.debug("SQL parameters: " + parameter.getParameters());
+        }
+
+        PreparedStatement ps = connection.prepareStatement(parameter.getSql());
         //设置参数
-        for (int i = 0; i < execute.getParameters().size(); i++) {
-            Entry entry = execute.getParameters().get(i);
+        for (int i = 0; i < parameter.getParameters().size(); i++) {
+            Entry entry = parameter.getParameters().get(i);
             Object value = entry.getValue();
             ps.setObject(i + 1, value);
         }
-        Class resultType = execute.getResultType();
 
-        //判断查询类型，select
-        if (execute.getType() == SQLExecuteType.SELECT) {
-            ResultSet rs = ps.executeQuery();
-            //结果集到对象
-            List<Map<String, Object>> results = ConvertResultSet.getResults(rs);
-            ConvertObject convert = new ConvertObject(resultType,execute.getActualTypeArguments());
-            List<?> list=convert.convertListToObjects(results);
-            //如果不是集合，默认返回一条
-            if (!ClassUtils.isCollection(execute.getResultType())) {
-                //或者模仿mybatis报错
-                return list.get(0);
-            }
-            return list;
 
-        } else if (execute.getType() == SQLExecuteType.DELETE || execute.getType() == SQLExecuteType.UPDATE) {
+        ResultHandler handler = null;
 
-            int number = ps.executeUpdate(execute.getSql());
-            //受影响行数
+        //判断查询类型
+        switch (parameter.getType()) {
+            case SELECT:
+                ResultSet rs = ps.executeQuery();
+                handler = new SelectResultHandler(rs, parameter);
+                break;
 
-        } else if (execute.getType() == SQLExecuteType.INSERT) {
+            case INSERT:
 
-            //执行update 和select key
-
+                break;
+            case UPDATE:
+            case DELETE:
+                int number = ps.executeUpdate();
+                //受影响行数
+                handler = new UpdateResultHandler(number, parameter);
+                break;
 
         }
+
+        if (handler != null) {
+            return handler.handler();
+        }
+
         connection.close();
 
         return null;

@@ -3,21 +3,21 @@ package org.fastsql.core;
 import org.fastsql.build.SQLBase;
 import org.fastsql.entity.SQLExecuteType;
 
-public class SQLExecute extends SQLBase {
+public class SQLParameter extends SQLBase {
 
 
     private Class resultType;
 
     private SQLExecuteType type;
 
-    private Class actualTypeArguments;
+    private Class actualType;
 
-    public Class getActualTypeArguments() {
-        return actualTypeArguments;
+    public Class getActualType() {
+        return actualType;
     }
 
-    public void setActualTypeArguments(Class actualTypeArguments) {
-        this.actualTypeArguments = actualTypeArguments;
+    public void setActualType(Class actualType) {
+        this.actualType = actualType;
     }
 
     public SQLExecuteType getType() {
@@ -38,7 +38,7 @@ public class SQLExecute extends SQLBase {
 
     @Override
     public String toString() {
-        return "SQLExecute{" +
+        return "SQLParameter{" +
                 "resultType=" + resultType +
                 "} " + super.toString();
     }

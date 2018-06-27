@@ -2,7 +2,7 @@ package org.fastsql.build;
 
 import org.fastsql.annotation.*;
 import org.fastsql.core.Entry;
-import org.fastsql.core.SQLExecute;
+import org.fastsql.core.SQLParameter;
 import org.fastsql.entity.SQLExecuteType;
 import org.fastsql.exception.SQLBuildRuntimeException;
 import org.fastsql.utils.StringUtils;
@@ -20,7 +20,7 @@ import java.util.regex.Pattern;
 
 public class SQLBuilder {
 
-    public static SQLExecute builder(Class clazz, Method method, Object[] args) {
+    public static SQLParameter builder(Class clazz, Method method, Object[] args) {
         //获取
 
         //如果是自动sql，按照自动sql方式处理
@@ -84,7 +84,7 @@ public class SQLBuilder {
      * @param args
      * @return
      */
-    public static SQLExecute handerAnnotation(Class clazz, Method method, Object[] args) {
+    public static SQLParameter handerAnnotation(Class clazz, Method method, Object[] args) {
         Annotation[][] paramterAnnotations = method.getParameterAnnotations();
 
         String[] fields = new String[paramterAnnotations.length];
@@ -144,7 +144,7 @@ public class SQLBuilder {
         SQLBase sqlBase = handlerSQL(sql, kv);
 
         //构建SQLExecute对象
-        SQLExecute execute = new SQLExecute();
+        SQLParameter execute = new SQLParameter();
         execute.setSql(sqlBase.getSql());
         execute.setParameters(sqlBase.getParameters());
         execute.setResultType(method.getReturnType());
@@ -155,8 +155,16 @@ public class SQLBuilder {
         Type returnType = method.getGenericReturnType();
         if (returnType != null && returnType instanceof ParameterizedType) {
             ParameterizedType pt = (ParameterizedType) returnType;
-            Class genericClazz = (Class) pt.getActualTypeArguments()[0];
-            execute.setActualTypeArguments(genericClazz);
+
+            Object object=pt.getActualTypeArguments()[0];
+
+            //如果class = sun.reflect.generics.reflectiveObjects.WildcardTypeImpl
+            //泛型类型为？，默认为null，指定默认类型
+
+            if (object !=sun.reflect.generics.reflectiveObjects.WildcardTypeImpl.class) {
+                Class genericClazz = (Class)object ;
+                execute.setActualType(genericClazz);
+            }
         }
 
         execute.setType(type);

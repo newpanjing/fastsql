@@ -55,3 +55,14 @@ public class QueryTest {
 
 }
 </pre>
+
+**返回类型支持**
+8个基础、String、Set、List、Map
+默认：
+Set=HashSet
+List=ArrayList
+Map=LinkedHashMap
+
+Set和List 不指定泛型，默认为Set<Map<String,Object>>和List<Map<String,Object>>
+
+

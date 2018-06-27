@@ -24,7 +24,7 @@ public class ObjectProxy implements InvocationHandler {
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Exception {
 
-        SQLExecute execute = SQLBuilder.builder(clazz, method, args);
+        SQLParameter execute = SQLBuilder.builder(clazz, method, args);
 
         Connection connection = dataSource.getConnection();
 

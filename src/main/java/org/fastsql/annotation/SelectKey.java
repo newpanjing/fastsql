@@ -13,6 +13,8 @@ public @interface SelectKey {
 
     String keyProperty() default "";
 
-    String keyColumn() default "";
+    String statement() default "select @@IDENTITY";
+
+    boolean before() default false;
 
 }
