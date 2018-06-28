@@ -2,12 +2,13 @@ package org.fastsql.test;
 
 
 import com.alibaba.druid.pool.DruidDataSource;
-import org.fastsql.annotation.Param;
 import org.fastsql.core.DefaultObjectFactory;
 
 import javax.sql.DataSource;
 import java.sql.SQLException;
-import java.util.*;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
 
 public class QueryTest {
 

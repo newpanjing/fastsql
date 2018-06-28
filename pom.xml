@@ -3,18 +3,23 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
+    <parent>
+        <groupId>org.sonatype.oss</groupId>
+        <artifactId>oss-parent</artifactId>
+        <version>7</version>
+    </parent>
+
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.fastsql</groupId>
     <artifactId>fastsql</artifactId>
-    <version>${fastsql.version}</version>
+    <version>1.0-beta</version>
     <packaging>jar</packaging>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
-        <maven.compiler.compilerVersion>1.8</maven.compiler.compilerVersion>
-        <fastsql.version>1.0</fastsql.version>
+        <maven.compiler.source>1.7</maven.compiler.source>
+        <maven.compiler.target>1.7</maven.compiler.target>
+        <maven.compiler.compilerVersion>1.7</maven.compiler.compilerVersion>
     </properties>
 
     <licenses>
@@ -41,6 +46,7 @@
             scm:git:https://github.com/newpanjing/fastsql.git
         </developerConnection>
         <url>https://github.com/newpanjing/fastsql</url>
+        <tag>v${project.version}</tag>
     </scm>
 
     <dependencies>
@@ -75,13 +81,26 @@
                     <include>**/*.*</include>
                 </includes>
             </resource>
-            <resource>
-                <directory>src/test/java</directory>
-                <includes>
-                    <include>**/*.*</include>
-                </includes>
-            </resource>
         </resources>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.18.1</version>
+                <configuration>
+                    <skipTests>true</skipTests>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.7</source>
+                    <target>1.7</target>
+                    <encoding>UTF-8</encoding>
+                </configuration>
+            </plugin>
+        </plugins>
     </build>
 
 </project>

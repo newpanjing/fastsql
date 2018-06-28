@@ -1,8 +1,6 @@
 package org.fastsql.test;
 
-import org.fastsql.annotation.Param;
-import org.fastsql.annotation.Select;
-import org.fastsql.annotation.Update;
+import org.fastsql.annotation.*;
 
 import java.util.*;
 
@@ -15,7 +13,7 @@ public interface UserDao {
     public ArrayList<User> selectAll();
 
 
-    @Select("select * from user")
+    @Select("select * from user where auto_id=1")
     public Map<String, Object> getMap();
 
     @Select("select * from user")
@@ -50,5 +48,25 @@ public interface UserDao {
 
     @Select("select * from user")
     public Set<TreeMap<String, Object>> getSetTreeMap();
+
+
+    /**
+     * 入参为对象，支持多级取值，#{user.a.b.c}
+     * @param user
+     * @return
+     */
+    @Insert("insert into user(name,sex,age,remark,local,create_time)values(#{user.name},#{user.sex},#{user.age},#{remark.text},#{user.local},#{user.createTime})")
+    public int insert(@Param("user") User user,@Param("remark") Remark remark);
+
+
+    /**
+     * 不加@Param 注解，只支持一个参数
+     * @param user
+     * @return
+     */
+    @SelectKey(keyProperty = "id")
+    @Insert("insert into user(name,sex,age,remark,local,create_time)values(#{name},#{sex},#{age},#{remark},#{local},#{createTime})")
+    public int insertUser(User user);
+
 
 }

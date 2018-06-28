@@ -35,26 +35,21 @@ public class ConvertObject {
      * @return
      * @throws Exception
      */
-    public List<Map<String, Object>> getResults(ResultSet rs,Class type) throws Exception {
+    public List<Map<String, Object>> getResults(ResultSet rs, Class type) throws Exception {
 
         //用arraylist 防止乱序
         List results;
 
         if (type.isInterface()) {
             results = new ArrayList<>();
-        }else{
+        } else {
             results = (List) type.newInstance();
         }
 
-        ResultSetMetaData rsmd = rs.getMetaData();
-        int count = rsmd.getColumnCount();
-
-        int rows = rs.getRow();
-        for (int i = 1; i < rows; i++) {
-            Map map = getMap(rs, actualType);
+        while (rs.next()) {
+            Map map = convertToMap(rs, actualType);
             results.add(map);
         }
-
         return results;
     }
 
@@ -172,12 +167,12 @@ public class ConvertObject {
      * @return
      * @throws Exception
      */
-    public List<Object> getList(ResultSet rs,Class type) throws Exception {
+    public List<Object> getList(ResultSet rs, Class type) throws Exception {
 
         List<Object> resultList;
         if (type.isInterface()) {
-            resultList= new ArrayList<>();
-        }else{
+            resultList = new ArrayList<>();
+        } else {
             resultList = (List<Object>) type.newInstance();
         }
 
@@ -259,6 +254,7 @@ public class ConvertObject {
 
     /**
      * 验证是否只有一列
+     *
      * @param rs
      */
     private void veryColumns(ResultSet rs) {
@@ -321,11 +317,12 @@ public class ConvertObject {
 
     /**
      * 获取String
+     *
      * @param rs
      * @return
      * @throws Exception
      */
-    public Object getString(ResultSet rs) throws Exception{
+    public Object getString(ResultSet rs) throws Exception {
         veryColumns(rs);
         if (rs.next()) {
             return getPrimitive(beanClass, rs);
@@ -333,14 +330,7 @@ public class ConvertObject {
         return null;
     }
 
-    /**
-     * 获取map
-     * @param rs
-     * @param resultType
-     * @return
-     * @throws Exception
-     */
-    public Map getMap(ResultSet rs, Class resultType) throws Exception {
+    private Map convertToMap(ResultSet rs, Class resultType) throws Exception {
         Map map = new LinkedHashMap();
 
 
@@ -348,17 +338,38 @@ public class ConvertObject {
             map = (Map) resultType.newInstance();
         }
 
-        if (rs.next()) {
 
-            ResultSetMetaData rsmd = rs.getMetaData();
-            int count = rsmd.getColumnCount();
+        ResultSetMetaData rsmd = rs.getMetaData();
+        int count = rsmd.getColumnCount();
 
-            for (int i = 1; i <= count; i++) {
-                map.put(rsmd.getColumnLabel(i), rs.getObject(i));
-            }
-
+        for (int i = 1; i <= count; i++) {
+            map.put(rsmd.getColumnLabel(i), rs.getObject(i));
         }
 
+
         return map;
+    }
+
+    /**
+     * 获取map
+     *
+     * @param rs
+     * @param resultType
+     * @return
+     * @throws Exception
+     */
+    public Map getMap(ResultSet rs, Class resultType) throws Exception {
+
+        Map result = null;
+        if (rs.next()) {
+            result = convertToMap(rs, resultType);
+        }
+
+        if (rs.next()) {
+            //抛异常，无法将多个值转为一个map
+            throw new ConvertException("Multiple values cannot be converted to a Map");
+        }
+
+        return result;
     }
 }

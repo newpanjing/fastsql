@@ -6,6 +6,8 @@ import org.fastsql.core.SQLParameter;
 import org.fastsql.entity.SQLExecuteType;
 import org.fastsql.exception.SQLBuildRuntimeException;
 import org.fastsql.utils.StringUtils;
+import sun.reflect.generics.reflectiveObjects.ParameterizedTypeImpl;
+import sun.reflect.generics.reflectiveObjects.WildcardTypeImpl;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
@@ -160,9 +162,13 @@ public class SQLBuilder {
 
             //如果class = sun.reflect.generics.reflectiveObjects.WildcardTypeImpl
             //泛型类型为？，默认为null，指定默认类型
+            if (object.getClass() == ParameterizedTypeImpl.class) {
 
-            if (object !=sun.reflect.generics.reflectiveObjects.WildcardTypeImpl.class) {
-                Class genericClazz = (Class)object ;
+                ParameterizedType parameterizedType = (ParameterizedTypeImpl) object;
+                execute.setActualType((Class) parameterizedType.getRawType());
+            } else if (object.getClass() != WildcardTypeImpl.class) {
+
+                Class genericClazz = (Class) object;
                 execute.setActualType(genericClazz);
             }
         }

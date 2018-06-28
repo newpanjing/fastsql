@@ -2,7 +2,6 @@ package org.fastsql.utils;
 
 import org.fastsql.exception.ConvertException;
 
-import java.lang.reflect.Method;
 import java.util.*;
 
 public class ClassUtils {
@@ -23,6 +22,11 @@ public class ClassUtils {
         for (Class c : classes) {
             if (c == Set.class) {
                 val = true;
+            }
+
+            if(isSet(c)){
+                val=true;
+                break;
             }
         }
         return val;
@@ -46,6 +50,11 @@ public class ClassUtils {
             for (Class c : classes) {
                 if (c == List.class || c == Collection.class) {
                     val = true;
+                    break;
+                }
+
+                if(isCollection(c)){
+                    val=true;
                     break;
                 }
             }
@@ -72,6 +81,10 @@ public class ClassUtils {
         for (Class c : classes) {
             if (c == Map.class) {
                 val = true;
+            }
+            if(isMap(c)){
+                val=true;
+                break;
             }
         }
         return val;
@@ -171,7 +184,7 @@ public class ClassUtils {
 
 
     public static void main(String[] args) {
-        System.out.println(isCollection(ArrayList.class));
-        System.out.println(isMap(HashMap.class));
+//        System.out.println(isCollection(ArrayList.class));
+        System.out.println(isSet(TreeSet.class));
     }
 }

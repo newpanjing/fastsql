@@ -1,12 +1,10 @@
 package org.fastsql.core;
 
 import org.apache.log4j.Logger;
-import org.fastsql.entity.SQLExecuteType;
-import org.fastsql.exception.ConvertException;
+import org.fastsql.handler.InsertResultHandler;
 import org.fastsql.handler.ResultHandler;
 import org.fastsql.handler.SelectResultHandler;
 import org.fastsql.handler.UpdateResultHandler;
-import org.fastsql.utils.ClassUtils;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -36,6 +34,8 @@ public class SQLActionExecuter {
         ResultHandler handler = null;
 
         //判断查询类型
+        int number=0;
+
         switch (parameter.getType()) {
             case SELECT:
                 ResultSet rs = ps.executeQuery();
@@ -43,11 +43,12 @@ public class SQLActionExecuter {
                 break;
 
             case INSERT:
-
+                number = ps.executeUpdate();
+                handler = new InsertResultHandler(number,parameter);
                 break;
             case UPDATE:
             case DELETE:
-                int number = ps.executeUpdate();
+                number = ps.executeUpdate();
                 //受影响行数
                 handler = new UpdateResultHandler(number, parameter);
                 break;

@@ -1,6 +1,5 @@
 package org.fastsql.handler;
 
-import javafx.scene.control.TableView;
 import org.fastsql.core.SQLParameter;
 import org.fastsql.utils.ClassUtils;
 import org.fastsql.utils.ConvertObject;
@@ -58,7 +57,7 @@ public class SelectResultHandler implements ResultHandler {
         return result;
     }
 
-    private Set handlerSet(Class type, List list) throws IllegalAccessException, InstantiationException {
+    private Set handlerSet(List list) throws IllegalAccessException, InstantiationException {
         Set set;
         if(resultType.isInterface()) {
             set = new HashSet<>();
@@ -84,7 +83,7 @@ public class SelectResultHandler implements ResultHandler {
             List<?> list = convert.getResults(rs,resultType);
             if (ClassUtils.isSet(resultType)) {
 
-                result = handlerSet(resultType,list);
+                result = handlerSet(list);
 
             }else{
                 result = list;
@@ -97,12 +96,15 @@ public class SelectResultHandler implements ResultHandler {
         } else if (ClassUtils.isMap(actualType)) {
             //处理list<map>
             result = convert.getResults(rs,resultType);
+            if (ClassUtils.isSet(resultType)) {
+                result = handlerSet((List)result);
+            }
         } else if (ClassUtils.isSet(resultType)) { //set 特殊处理
             //默认返回HashSet
 
             //处理set<bean>
             List<?> list = convert.getList(rs,resultType);
-            result = handlerSet(resultType,list);
+            result = handlerSet(list);
 
         } else {
             //处理list<bean>
