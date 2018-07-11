@@ -2,13 +2,13 @@
 
 fastsql 是一个数据库访问框架
 ***Maven依赖***
-<pre>
+`
 <dependency>
     <groupId>org.fastsql</groupId>
     <artifactId>fastsql</artifactId>
     <version>1.0</version>
 </dependency>
-</pre>
+`
 
 ***范例***
 
