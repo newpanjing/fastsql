@@ -1,6 +1,7 @@
 # fastsql
 
-fastsql 是一个数据库访问框架
+`fastsql 是一个数据库访问框架`
+
 ***Maven依赖***
 <pre>
 <code>
